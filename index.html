@@ -11,7 +11,7 @@
         const state = {
             users: [],
         };
-        
+
         $().ready(() => {
             function appendUserElement(user) {
                 const $user = $(
@@ -39,17 +39,19 @@
                 });
             }
 
-            getUser(appendUserElement);
-
-
+            $('.get-user-button').on('click', () => {                
+                getUser(appendUserElement);
+            });
         });
     </script>
 </head>
 
 <body>
-    <div class="container">
+    <div class="app">
+        <button class="get-user-button">GET USER</button>
+        <div class="container">
 
-
+        </div>
     </div>
 </body>
 
