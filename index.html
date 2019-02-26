@@ -10,6 +10,7 @@
         const USER_API_URL = 'https://randomuser.me/api';
         const state = {
             users: [],
+            nextId: 0,
         };
 
         $().ready(() => {
@@ -20,11 +21,21 @@
                                 <img src="${user.picture.large}"/>
                                 <div>
                                     <p>${user.name.first} ${user.name.last}</p>
-                                    <p>${user.email}</p>                                    
+                                    <p>${user.email}</p>
+                                    <button class="delete-button">DELETE</button> 
                                 </div>
                             </div>
                         `
-                )
+                );
+
+                $user.find('.delete-button').on('click', () => {
+                    // remove user from HTML
+                    $user.remove();
+
+                    // remove user from state
+                    removeUserFromState(user);
+                });
+
                 $('.container').append($user);
             }
 
@@ -33,25 +44,46 @@
                     url: USER_API_URL,
                     success: (response) => {
                         const user = response.results[0];
-                        state.users.push(user);
+                        addUserToState(user);
                         onUserReceived(user);
                     }
                 });
             }
 
-            $('.get-user-button').on('click', () => {                
+            function removeUserFromState(user) {
+                const userIndex = state.users.findIndex(testedUser => testedUser.id === user.id);
+                    // verify that user exists in state.users
+                    if (userIndex === -1) {
+                        throw new Error(`user index '${user.id}' is illegal`);
+                    }
+                    state.users.splice(userIndex, 1);
+            }
+
+            function addUserToState(user) {
+                user = Object.assign(user, {
+                    id: state.nextId++
+                });
+                state.users.push(user);
+            }
+
+            $('.get-user-button').on('click', () => {
                 getUser(appendUserElement);
             });
 
             for (let i = 0; i < 10; i++) {
                 getUser(appendUserElement);
             }
+
+            $('.print-users-button').on('click', () => {
+                console.log(state.users);
+            });
         });
     </script>
 </head>
 
 <body>
     <div class="app">
+        <button class="print-users-button">PRINT USERS</button>
         <button class="get-user-button">GET USER</button>
         <div class="container">
 
