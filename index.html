@@ -11,10 +11,10 @@
         const state = {
             users: [],
         };
-
+        
         $().ready(() => {
-            function createUserElement(user) {
-                return $(
+            function appendUserElement(user) {
+                const $user = $(
                     `
                          <div>
                                 <img src="${user.picture.large}"/>
@@ -25,23 +25,23 @@
                             </div>
                         `
                 )
+                $('.container').append($user);
             }
 
-            function getUser() {
+            function getUser(onUserReceived) {
                 $.get({
                     url: USER_API_URL,
                     success: (response) => {
                         const user = response.results[0];
                         state.users.push(user);
-                        const $user = createUserElement(user);
-                        $('.container').append($user);
+                        onUserReceived(user);
                     }
                 });
             }
 
-            getUser();
+            getUser(appendUserElement);
 
-            
+
         });
     </script>
 </head>
