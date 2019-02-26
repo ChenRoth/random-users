@@ -1,12 +1,56 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Random Users!</title>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script>
+        const USER_API_URL = 'https://randomuser.me/api';
+        const state = {
+            users: [],
+        };
+
+        $().ready(() => {
+            function createUserElement(user) {
+                return $(
+                    `
+                         <div>
+                                <img src="${user.picture.large}"/>
+                                <div>
+                                    <p>${user.name.first} ${user.name.last}</p>
+                                    <p>${user.email}</p>                                    
+                                </div>
+                            </div>
+                        `
+                )
+            }
+
+            function getUser() {
+                $.get({
+                    url: USER_API_URL,
+                    success: (response) => {
+                        const user = response.results[0];
+                        state.users.push(user);
+                        const $user = createUserElement(user);
+                        $('.container').append($user);
+                    }
+                });
+            }
+
+            getUser();
+
+            
+        });
+    </script>
 </head>
+
 <body>
+    <div class="container">
+
+
+    </div>
 </body>
 
 </html>
