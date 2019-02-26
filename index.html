@@ -7,13 +7,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <script>
-        const USER_API_URL = 'https://randomuser.me/api';
-        const state = {
-            users: [],
-            nextId: 0,
-        };
-
         $().ready(() => {
+            const USER_API_URL = 'https://randomuser.me/api';
+            const state = {
+                users: [],
+                nextId: 0,
+            };
+
             function appendUserElement(user) {
                 const $user = $(
                     `
@@ -33,7 +33,7 @@
                     $user.remove();
 
                     // remove user from state
-                    removeUserFromState(user);
+                    removeUserFromState(user)
                 });
 
                 $('.container').append($user);
@@ -52,11 +52,11 @@
 
             function removeUserFromState(user) {
                 const userIndex = state.users.findIndex(testedUser => testedUser.id === user.id);
-                    // verify that user exists in state.users
-                    if (userIndex === -1) {
-                        throw new Error(`user index '${user.id}' is illegal`);
-                    }
-                    state.users.splice(userIndex, 1);
+                // verify that user exists in state.users
+                if (userIndex === -1) {
+                    throw new Error(`user index '${user.id}' is illegal`);
+                }
+                state.users.splice(userIndex, 1);
             }
 
             function addUserToState(user) {
