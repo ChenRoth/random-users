@@ -42,6 +42,8 @@
                 
                 const editedUserId = state.currentEditedUserId;
                 editUserInState(editedUserId, editedFields);
+                editUserInHTML(editedUserId);
+                closeEditForm();
             });
             
             function getUser(onUserReceived) {
@@ -58,11 +60,11 @@
             function appendUserElement(user) {                
                 const $user = $(
                     `
-                         <div>
+                         <div class="user">
                                 <img src="${user.picture.large}"/>
                                 <div>
-                                    <p>${user.name.first} ${user.name.last}</p>
-                                    <p>${user.email}</p>
+                                    <p class="name">${user.name.first} ${user.name.last}</p>
+                                    <p class="email">${user.email}</p>
                                     <button class="delete-button">DELETE</button> 
                                     <button class="edit-button">EDIT</button>
                                 </div>
@@ -97,6 +99,19 @@
             function openEditForm() {
                 const $modal = $('#edit-modal');
                 $modal.modal('show');
+            }
+
+            function closeEditForm() {
+                const $modal = $('#edit-modal');
+                $modal.modal('hide');
+            }
+
+            function editUserInHTML(id) {
+                const userIndex = findUserIndex(id);
+                const user = state.users[userIndex];
+                const $user = $('.user').eq(userIndex);
+                $user.find('.name').text(`${user.name.first} ${user.name.last}`);
+                $user.find('.email').text(user.email);
             }
 
             function editUserInState(id, fields) {
