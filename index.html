@@ -12,6 +12,7 @@
             const state = {
                 users: [],
                 nextId: 0,
+                currentEditedUserId: null,
             };
 
             $('.get-user-button').on('click', () => {
@@ -46,6 +47,7 @@
                                     <p>${user.name.first} ${user.name.last}</p>
                                     <p>${user.email}</p>
                                     <button class="delete-button">DELETE</button> 
+                                    <button class="edit-button">EDIT</button>
                                 </div>
                             </div>
                         `
@@ -57,6 +59,10 @@
 
                     // remove user from state
                     removeUserFromState(user)
+                });
+
+                $user.find('.edit-button').on('click', () => {
+                    state.currentEditedUserId = user.id;
                 });
 
                 $('.container').append($user);
