@@ -62,8 +62,11 @@
                 });
 
                 $user.find('.edit-button').on('click', () => {
-                    state.currentEditedUserId = user.id;
-                    $('#edit-modal').modal('show');
+                    state.currentEditedUserId = user.id;                    
+                    const $modal = $('#edit-modal');
+                    $modal.find('input[name=name]').val(`${user.name.first} ${user.name.last}`);
+                    $modal.find('input[name=email]').val(user.email);
+                    $modal.modal('show');
                 });
 
                 $('.container').append($user);
