@@ -7,14 +7,37 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <script>
-        $().ready(() => {
+        $().ready(() => {            
             const USER_API_URL = 'https://randomuser.me/api';
             const state = {
                 users: [],
                 nextId: 0,
             };
 
-            function appendUserElement(user) {
+            $('.get-user-button').on('click', () => {
+                getUser(appendUserElement);
+            });
+
+            for (let i = 0; i < 10; i++) {
+                getUser(appendUserElement);
+            }
+
+            $('.print-users-button').on('click', () => {
+                console.log(state.users);
+            });
+            
+            function getUser(onUserReceived) {
+                $.get({
+                    url: USER_API_URL,
+                    success: (response) => {
+                        const user = response.results[0];
+                        const userWithNewId = addUserToState(user);
+                        onUserReceived(userWithNewId);
+                    }
+                });
+            }
+
+            function appendUserElement(user) {                
                 const $user = $(
                     `
                          <div>
@@ -38,18 +61,7 @@
 
                 $('.container').append($user);
             }
-
-            function getUser(onUserReceived) {
-                $.get({
-                    url: USER_API_URL,
-                    success: (response) => {
-                        const user = response.results[0];
-                        addUserToState(user);
-                        onUserReceived(user);
-                    }
-                });
-            }
-
+            
             function removeUserFromState(user) {
                 const userIndex = state.users.findIndex(testedUser => testedUser.id === user.id);
                 // verify that user exists in state.users
@@ -60,23 +72,12 @@
             }
 
             function addUserToState(user) {
-                user = Object.assign(user, {
+                const modifiedUser = Object.assign(user, {
                     id: state.nextId++
                 });
-                state.users.push(user);
+                state.users.push(modifiedUser);
+                return modifiedUser;
             }
-
-            $('.get-user-button').on('click', () => {
-                getUser(appendUserElement);
-            });
-
-            for (let i = 0; i < 10; i++) {
-                getUser(appendUserElement);
-            }
-
-            $('.print-users-button').on('click', () => {
-                console.log(state.users);
-            });
         });
     </script>
 </head>
