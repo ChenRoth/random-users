@@ -9,6 +9,7 @@
     <script>
         $().ready(() => {            
             const USER_API_URL = 'https://randomuser.me/api';
+            const USERS_PER_ROW = 3;
             const state = {
                 users: [],
                 nextId: 0,
@@ -60,7 +61,7 @@
             function appendUserElement(user) {                
                 const $user = $(
                     `
-                         <div class="user">
+                         <div class="user col-12 col-md-${Math.floor(12 / USERS_PER_ROW)}">
                                 <img src="${user.picture.large}"/>
                                 <div>
                                     <p class="name">${user.name.first} ${user.name.last}</p>
@@ -87,7 +88,11 @@
                     openEditForm();
                 });
 
-                $('.container').append($user);
+                if (state.users.length % USERS_PER_ROW === 0) {
+                    $('.container').append($('<div class="row"></div>'));
+                }
+
+                $('.row:last').append($user);
             }
 
             function prefillEditForm(user) {
@@ -109,7 +114,9 @@
             function editUserInHTML(id) {
                 const userIndex = findUserIndex(id);
                 const user = state.users[userIndex];
-                const $user = $('.user').eq(userIndex);
+                // we use the selector '.user:eq(x)' to avoid iterating over ALL .user in DOM
+                // this selector will cause jQuery to stop iterating once we get .user:eq(x)
+                const $user = $(`.user:eq(${userIndex})`);
                 $user.find('.name').text(`${user.name.first} ${user.name.last}`);
                 $user.find('.email').text(user.email);
             }
@@ -149,7 +156,6 @@
         <button class="print-state-button">PRINT STATE</button>
         <button class="get-user-button">GET USER</button>
         <div class="container">
-
         </div>
     </div>
     <div id="edit-modal" class="modal fade" role="dialog">
