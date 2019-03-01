@@ -22,8 +22,8 @@
                 getUser(appendUserElement);
             }
 
-            $('.print-users-button').on('click', () => {
-                console.log(state.users);
+            $('.print-state-button').on('click', () => {
+                console.log(state);
             });
             
             function getUser(onUserReceived) {
@@ -84,7 +84,7 @@
 
 <body>
     <div class="app">
-        <button class="print-users-button">PRINT USERS</button>
+        <button class="print-state-button">PRINT STATE</button>
         <button class="get-user-button">GET USER</button>
         <div class="container">
 
