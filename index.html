@@ -62,16 +62,26 @@
                 });
 
                 $user.find('.edit-button').on('click', () => {
-                    state.currentEditedUserId = user.id;                    
-                    const $modal = $('#edit-modal');
-                    $modal.find('input[name=name]').val(`${user.name.first} ${user.name.last}`);
-                    $modal.find('input[name=email]').val(user.email);
-                    $modal.modal('show');
+                    state.currentEditedUserId = user.id;
+                    
+                    prefillEditForm(user);    
+                    openEditForm();
                 });
 
                 $('.container').append($user);
             }
-            
+
+            function prefillEditForm(user) {
+                const $modal = $('#edit-modal');
+                $modal.find('input[name=name]').val(`${user.name.first} ${user.name.last}`);
+                $modal.find('input[name=email]').val(user.email);
+            }
+
+            function openEditForm() {
+                const $modal = $('#edit-modal');
+                $modal.modal('show');
+            }
+
             function removeUserFromState(user) {
                 const userIndex = state.users.findIndex(testedUser => testedUser.id === user.id);
                 // verify that user exists in state.users
@@ -120,7 +130,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Save</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>                        
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
