@@ -26,6 +26,23 @@
             $('.print-state-button').on('click', () => {
                 console.log(state);
             });
+
+            $('#edit-user-form').on('submit', (e) => {
+                e.preventDefault();
+
+                const form = e.currentTarget;
+
+                const fullName = form.name.value;
+                const [first, last] = fullName.split(' ');
+
+                const editedFields = {
+                    name: {first: first, last: last},
+                    email: form.email.value
+                };
+                
+                const editedUserId = state.currentEditedUserId;
+                editUserInState(editedUserId, editedFields);
+            });
             
             function getUser(onUserReceived) {
                 $.get({
@@ -82,6 +99,15 @@
                 $modal.modal('show');
             }
 
+            function editUserInState(id, fields) {
+                const userIndex = state.users.findIndex(testedUser => testedUser.id === id);
+                // verify that user exists in state.users
+                if (userIndex === -1) {
+                    throw new Error(`user index '${id}' is illegal`);
+                }
+                state.users[userIndex] = Object.assign(state.users[userIndex], fields);
+            }
+
             function removeUserFromState(user) {
                 const userIndex = state.users.findIndex(testedUser => testedUser.id === user.id);
                 // verify that user exists in state.users
@@ -117,7 +143,7 @@
                     <h4 class="modal-title">Edit User</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form class="form">
+                <form id="edit-user-form" class="form">
                     <div class="modal-body">
                         <div>
                             <label for="name">Name</label>
